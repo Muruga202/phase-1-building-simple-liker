@@ -4,8 +4,36 @@ const FULL_HEART = '♥'
 
 // Your JavaScript code goes here!
 
+// Add the .hidden class to the error modal initially
+document.getElementById('modal').classList.add('hidden');
 
+// Function to handle heart click
+function handleHeartClick(event) {
+  const heart = event.target;
+  mimicServerCall()
+    .then(() => {
+      if (heart.innerText === EMPTY_HEART) {
+        heart.innerText = FULL_HEART;
+        heart.classList.add('activated-heart');
+      } else {
+        heart.innerText = EMPTY_HEART;
+        heart.classList.remove('activated-heart');
+      }
+    })
+    .catch((error) => {
+      const modal = document.getElementById('modal');
+      modal.classList.remove('hidden');
+      modal.querySelector('#modal-message').innerText = error;
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 3000);
+    });
+}
 
+// Add event listeners to all heart elements
+document.querySelectorAll('.like-glyph').forEach(heart => {
+  heart.addEventListener('click', handleHeartClick);
+});
 
 //------------------------------------------------------------------------------
 // Don't change the code below: this function mocks the server response
